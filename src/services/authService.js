@@ -36,19 +36,19 @@ export async function register(username, email, password, otp) {
 		confirmOTP: otp,
 	})
     
-	let emailHtml = "<p>Please confirm your account.</p><p>OTP: "+ otp +"</p>"
+	// let emailHtml = "<p>Please confirm your account.</p><p>OTP: "+ otp +"</p>"
     
-	mailer(
-		process.env["EMAIL_SMTP_USERNAME"],
-		email,
-		"Confirm account",
-		emailHtml
-	).then(() => {
-		user.save()
-	}).catch(err => {
-		console.log("error from mailer", err);
-		throw err;
-	})
+	// mailer(
+	// 	process.env["EMAIL_SMTP_USERNAME"],
+	// 	email,
+	// 	"Confirm account",
+	// 	emailHtml
+	// ).then(() => {
+	// 	user.save()
+	// }).catch(err => {
+	// 	console.log("error from mailer", err);
+	// 	throw err;
+	// })
     
 	return createToken(user)
     
@@ -71,11 +71,11 @@ export async function login(email, password) {
 		throw new Error("Incorrect email or password!")
 	}
 
-	if( existingEmail.isConfirmed ) {
-		return createToken(existingEmail)
-	} else {
-		throw new Error("Account is not active! Please contact admin!")
-	}
+	// if( existingEmail.isConfirmed ) {
+	return createToken(existingEmail)
+	// } else {
+	// 	throw new Error("Account is not active! Please contact admin!")
+	// }
     
 }
 
