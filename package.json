@@ -1,5 +1,5 @@
 {
-  "name": "rest-api-scaffold",
+  "name": "rest-api",
   "version": "1.0.0",
   "description": "REST API",
   "type": "module",
@@ -7,6 +7,7 @@
   "engines": {
     "node": "18.x"
   },
+ 
   "scripts": {
     "start:development": "nodemon src/server.js",
     "start:production": "node src/server.js",

@@ -1,12 +1,12 @@
 
 import express from "express";
 
-import getSingleProjectDetails from "../services/projectService";
-import { authMiddleware } from "../middlewares/guards";
+import getSingleProjectDetails from "../services/projectService.js";
+import { authMiddleware } from "../middlewares/guards.js";
 
 const router = express.Router();
 
-router.get("/:id", authMiddleware, async (req, res) => {
+router.get("/projects/:id", authMiddleware, async (req, res) => {
 	try {
 		getSingleProjectDetails(req, res)
 	} catch (error) {

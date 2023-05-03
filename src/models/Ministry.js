@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-const Schema = mongoose.Schema;
+import { Schema, model } from "mongoose";
 
 const ministrySchema = new Schema({
 	name: {
@@ -8,6 +7,6 @@ const ministrySchema = new Schema({
 	}
 }, { timestamps: true });
 
-const Ministry = mongoose.model("Ministry", ministrySchema);
+const Ministry = model("Ministry", ministrySchema);
 
 export default Ministry;

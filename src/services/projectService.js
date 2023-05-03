@@ -1,5 +1,5 @@
 
-import Project from "../models/Project";
+import Project from "../models/Project.js";
 
 const getSingleProjectDetails = async (req, res) => {
 	try {

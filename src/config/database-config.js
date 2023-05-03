@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
 
-import { app } from "../server.js";
-
 export default function() {
     
 	mongoose.connect(process.env["DATABASE_CONNECTION_URL"], {
@@ -9,11 +7,7 @@ export default function() {
 		useUnifiedTopology: true
 	})
 		.then(() => 
-			app.listen(
-				process.env["PORT"],
-				() => 
-					console.log("Server listening on port " + process.env["PORT"])
-			)
+			console.log("DATABASE_CONNECTION_SUCCESS")	
 		)
 		.catch((error) => {
 			console.log(error);

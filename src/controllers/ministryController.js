@@ -1,7 +1,8 @@
-import express from "express";
-import Ministry from "../models/Ministry";
-import Project from "../models/Project";
-import { authMiddleware } from "../middlewares/guards";
+
+import express  from "express";
+import Ministry from "../models/Ministry.js";
+import { authMiddleware } from "../middlewares/guards.js";
+import Project from "../models/Project.js";
 
 const router = express.Router();
 
