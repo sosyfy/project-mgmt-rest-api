@@ -6,22 +6,14 @@ import User from "../models/User.js";
 import mailer from "../utils/mailer.js";
 import randomNumber from "../utils/randomNumber.js";
 
-export async function register(username, email, password, otp) {
-	const existingUsername = await User.findOne({username : username})
-		.collation({
-			locale: "en",
-			strength: 2//case insensitive
-		})
+export async function register(email, password, otp) {
+	const existingUsername = await User.findOne({email : email})
     
 	if( existingUsername ) {
-		throw new Error("Username is taken!")
+		throw new Error("Email is taken!")
 	}
     
-	const existingEmail = await User.findOne({email : email})
-		.collation({
-			locale: "en",
-			strength: 2//case insensitive
-		})
+	const existingEmail = await User.findOne({ email : email })
     
 	if( existingEmail ) {
 		throw new Error("Email is taken!")
@@ -29,8 +21,7 @@ export async function register(username, email, password, otp) {
     
 	const hashedPassword = await bcrypt.hash(password, Number(process.env["SALT"]))
     
-	const user = new User({
-		username,
+	const user = await User.create({
 		email,
 		hashedPassword,
 		isConfirmed: true,

@@ -25,7 +25,7 @@ async function authAction(req, res, action, httpErrorStatus) {
 			data = await login(formData.email, formData.password)
 		} else if( action === "register" ) {
 			let otp = randomNumber(4);
-			data = await register(formData.username, formData.email, formData.password, otp)
+			data = await register(formData.email, formData.password, otp)
 		} else if( action === "verify" ) {
 			data = await verifyConfirm(formData.email, formData.otp)
 		} else if( action === "resend-verify" ) {

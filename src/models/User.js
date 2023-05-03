@@ -23,12 +23,11 @@ const userSchema = new Schema({
 	roles: {
 		type : [ String ],
 		default: ["user"],
-		required: true
 	},
 	isConfirmed: {
 		type: Boolean,
 		required: true,
-		default: 0//meaning false
+		default: 1//meaning true
 	},
 	confirmOTP: {
 		type: String,
@@ -58,19 +57,6 @@ const userSchema = new Schema({
 	}
 })
 
-userSchema.index({ username: 1 }, {
-	collation: {
-		locale: "en",
-		strength: 2//case insensitive
-	}
-})
-
-userSchema.index({ email: 1 }, {
-	collation: {
-		locale: "en",
-		strength: 2//case insensitive
-	}
-})
 
 const User = model("User", userSchema)
 
