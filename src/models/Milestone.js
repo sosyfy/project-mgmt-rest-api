@@ -19,12 +19,12 @@ const milestoneSchema = new Schema({
 	},
 	status: {
 		type: String,
-		enum: ["on schedule", "behind"],
+		enum: ["on schedule", "behind" , "Completed" , "active"],
 		default: "on schedule"
 	},
-	project_id: {
+	project_phase_id: {
 		type: Schema.Types.ObjectId,
-		ref: "Project",
+		ref: "ProjectPhase",
 		required: true
 	}
 }, { timestamps: true });

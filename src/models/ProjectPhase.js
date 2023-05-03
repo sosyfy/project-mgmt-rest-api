@@ -7,6 +7,10 @@ const projectPhaseSchema = new Schema({
 		ref: "Project",
 		required: true
 	},
+	milestones: [{
+		type: Schema.Types.ObjectId,
+		ref: "Milestone"
+	}],
 	name: {
 		type: String,
 		required: true

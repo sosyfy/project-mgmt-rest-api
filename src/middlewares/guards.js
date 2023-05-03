@@ -1,3 +1,5 @@
+import jwt from "jsonwebtoken";
+ 
 export const hasUser = () => {
     
 	return (req, res, next) => {
@@ -41,3 +43,25 @@ export const hasRole = () => {
 		}
 	}
 }
+
+
+
+
+export const authMiddleware = (req, res, next) => {
+	const authHeader = req.headers.authorization;
+
+	if (!authHeader) {
+		return res.status(401).json({ message: "Missing authorization header" });
+	}
+
+	const token = authHeader.split(" ")[1];
+
+	jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+		if (err) {
+			return res.status(401).json({ message: "Invalid token" });
+		}
+
+		req.userId = decoded.userId;
+		next();
+	});
+};

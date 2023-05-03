@@ -18,11 +18,19 @@ const projectSchema = new Schema({
 		type: String,
 		required: true
 	},
+	budget: {
+		type: Number,
+		required: true
+	},
 	ministry_id: {
 		type: Schema.Types.ObjectId,
 		ref: "Ministry",
 		required: true
-	}
+	},
+	project_phases: [{
+		type: Schema.Types.ObjectId,
+		ref: "ProjectPhase"
+	}]
 }, { timestamps: true });
 
 const Project = model("Project", projectSchema);
