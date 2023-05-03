@@ -1,7 +1,11 @@
 
+import Milestone from "../models/Milestone.js";
 import Project from "../models/Project.js";
+import ProjectPhase from "../models/ProjectPhase.js";
 
-const getSingleProjectDetails = async (req, res) => {
+
+
+export const getSingleProjectDetails = async (req, res) => {
 	try {
 		const project = await Project.findById(req.params.id)
 			.populate({
@@ -42,7 +46,7 @@ const getSingleProjectDetails = async (req, res) => {
 			name: project.name,
 			funding_sponsor: project.funding_sponsor,
 			commencement_date: project.start_date,
-			current_milestone: project.project_phases[0].milestones[0].name,
+			current_milestone: project.project_phases[0]?.milestones[0]?.name,
 			last_update: project.updatedAt,
 			amount_spent: amountSpent,
 			budget: project.budget,
@@ -82,4 +86,54 @@ const getSingleProjectDetails = async (req, res) => {
 	}
 };
 
-export default getSingleProjectDetails
+
+export const createNewProject =  async (req, res) => {
+	try {
+		// create a new project
+		const project = new Project({
+			name: req.body.name,
+			start_date: req.body.start_date,
+			end_date: req.body.end_date,
+			funding_sponsor: req.body.funding_sponsor,
+			budget: req.body.budget,
+			ministry_id: req.body.ministry_id
+		});
+		await project.save();
+  
+		// create project phases
+		const phases = req.body.phases;
+		for (let i = 0; i < phases.length; i++) {
+			const phase = new ProjectPhase({
+				project_id: project._id,
+				name: phases[i].name,
+				start_date: phases[i].start_date,
+				end_date: phases[i].end_date,
+				budget: phases[i].budget
+			});
+			await phase.save();
+            
+			project.project_phases.push(phase._id)
+
+			await project.save()
+			// create milestones for each phase
+			const milestones = phases[i].milestones;
+			for (let j = 0; j < milestones.length; j++) {
+				const milestone = new Milestone({
+					project_phase_id: phase._id,
+					name: milestones[j].name,
+					budget: milestones[j].budget,
+					due_date: milestones[j].due_date
+				});
+				
+				await milestone.save();
+				phase.milestones.push(milestone._id)
+				await phase.save()
+			}
+		}
+  
+		res.status(201).json({ message: "Project created successfully", project });
+	} catch (error) {
+		res.status(500).json({ message: "An error occurred while creating the project" });
+	}
+};
+  

@@ -20,7 +20,7 @@ router.get("/ministries", authMiddleware, async (req, res) => {
 
 
 				const completedProjects = projects.filter(
-					(project) => project.end_date <= Date.now()
+					(project) => project.end_date <= Date.now() 
 				);
 
 
@@ -59,7 +59,8 @@ router.get("/ministries", authMiddleware, async (req, res) => {
 router.get("/ministries/:id",authMiddleware , async (req, res) => {
 	try {
 		const ministry = await Ministry.findById(req.params.id);
-		res.json(ministry);
+		const projects = await Project.find({ ministry_id : req.params.id }).populate("project_phases")
+		res.json({ministry, projects} );
 	} catch (err) {
 		res.status(500).json({ error: err.message });
 	}

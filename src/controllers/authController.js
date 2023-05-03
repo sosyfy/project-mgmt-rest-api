@@ -64,12 +64,6 @@ router.post("/login",
 
 router.post("/register", 
 	isGuest(),
-	body("username")
-		.notEmpty()
-		.withMessage("Username should be specified!")
-		.bail()
-		.isLength({min: 5})
-		.withMessage("Username must be at least 5 characters long!"),
 	body("email")
 		.notEmpty()
 		.withMessage("Email should be specified")

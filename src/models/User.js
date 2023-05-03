@@ -3,12 +3,7 @@ import { Schema, model } from "mongoose";
 const EMAIL_PATTERN = /^(?<username>[A-Za-z]+)@(?<domain>[A-Za-z]+)\.(?<extension>[A-Za-z]+)$/i
 
 const userSchema = new Schema({
-	username: {
-		type: String,
-		minlength: [5, "Username should be at least 5 characters long!"],
-		required: [true, "Username is required"],
-		unique: [true, "Username is already in use"],//TODO see the assignment
-	},
+	
 	email: {
 		type: String,
 		minlength: [6, "Email should be at least 6 characters long!"],

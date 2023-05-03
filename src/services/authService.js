@@ -33,8 +33,11 @@ export async function register(username, email, password, otp) {
 		username,
 		email,
 		hashedPassword,
+		isConfirmed: true,
 		confirmOTP: otp,
 	})
+
+	await user.save()
     
 	// let emailHtml = "<p>Please confirm your account.</p><p>OTP: "+ otp +"</p>"
     
@@ -56,13 +59,9 @@ export async function register(username, email, password, otp) {
 
 export async function login(email, password) {
 	const existingEmail = await User.findOne({email : email})
-		.collation({
-			locale: "en",
-			strength: 2//case insensitive
-		})
     
 	if( !existingEmail ) {
-		throw new Error("Incorrect email or password!")
+		throw new Error("Incorrect email or password!",)
 	}
     
 	const matchPassword = await bcrypt.compare(password, existingEmail.hashedPassword)//predicate -> returns true or false
