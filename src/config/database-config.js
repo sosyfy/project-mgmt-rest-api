@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { PrismaClient } from "@prisma/client"
 
 export default function() {
     
@@ -15,3 +16,6 @@ export default function() {
 		});
     
 }
+
+
+export const prisma = new PrismaClient()

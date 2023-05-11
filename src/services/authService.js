@@ -1,19 +1,17 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
 //model
-import User from "../models/User.js";
+// import User from "../models/User.js";
 import mailer from "../utils/mailer.js";
 import randomNumber from "../utils/randomNumber.js";
+import { prisma } from "../config/database-config.js";
 
-export async function register(email, password, otp) {
-	const existingUsername = await User.findOne({email : email})
-    
-	if( existingUsername ) {
-		throw new Error("Email is taken!")
-	}
-    
-	const existingEmail = await User.findOne({ email : email })
+export async function register(email, password, roles, otp) {
+	const existingEmail = await prisma.user.findUnique({
+		where: {
+			email: email 
+		}
+	})
     
 	if( existingEmail ) {
 		throw new Error("Email is taken!")
@@ -21,16 +19,18 @@ export async function register(email, password, otp) {
     
 	const hashedPassword = await bcrypt.hash(password, Number(process.env["SALT"]))
     
-	const user = await User.create({
-		email,
-		hashedPassword,
-		isConfirmed: true,
-		confirmOTP: otp,
+	const user = await prisma.user.create({
+		data: {
+				email,
+				hashedPassword,
+				isConfirmed: true,
+				confirmOTP: otp,
+				roles: roles 
+		}
 	})
 
-	await user.save()
-    
-	// let emailHtml = "<p>Please confirm your account.</p><p>OTP: "+ otp +"</p>"
+	
+    // let emailHtml = "<p>Please confirm your account.</p><p>OTP: "+ otp +"</p>"
     
 	// mailer(
 	// 	process.env["EMAIL_SMTP_USERNAME"],
@@ -48,11 +48,19 @@ export async function register(email, password, otp) {
     
 }
 
-export async function login(email, password) {
-	const existingEmail = await User.findOne({email : email})
+export async function login(email, password , role ) {
+	const existingEmail = await prisma.user.findUnique({
+		where: {
+			email: email 
+		}
+	})
     
 	if( !existingEmail ) {
 		throw new Error("Incorrect email or password!",)
+	}
+
+	if ( !existingEmail.roles.includes(role) ){
+		throw new Error("You don't have this role",)
 	}
     
 	const matchPassword = await bcrypt.compare(password, existingEmail.hashedPassword)//predicate -> returns true or false

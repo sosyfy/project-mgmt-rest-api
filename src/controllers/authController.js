@@ -10,7 +10,6 @@ const router = express.Router()
 
 async function authAction(req, res, action, httpErrorStatus) {
 	const formData = req.body;
-	console.log("formData", formData)
     
 	try {
 		const { errors } = validationResult(req)
@@ -22,10 +21,10 @@ async function authAction(req, res, action, httpErrorStatus) {
 		let data;
         
 		if( action === "login" ) {
-			data = await login(formData.email, formData.password)
+			data = await login(formData.email, formData.password, formData.role )
 		} else if( action === "register" ) {
 			let otp = randomNumber(4);
-			data = await register(formData.email, formData.password, otp)
+			data = await register(formData.email, formData.password, formData.roles, otp)
 		} else if( action === "verify" ) {
 			data = await verifyConfirm(formData.email, formData.otp)
 		} else if( action === "resend-verify" ) {
@@ -36,7 +35,7 @@ async function authAction(req, res, action, httpErrorStatus) {
 
 	} catch ( error ) {
 		const message = parseError(error)
-        
+                    
 		//400 - bad request
 		res.status(httpErrorStatus).json({
 			message
@@ -75,11 +74,6 @@ router.post("/register",
 	body("password")
 		.isLength({min: 6})
 		.withMessage("Password must be at least 6 characters long!"),
-	body("repass")
-		.custom((value, {req}) => {
-			return value.trim() === req.body.password
-		})
-		.withMessage("Password don't match!"),
 	async (req, res) => {
 		await authAction(req, res, "register", 400)
 	})
